@@ -36,6 +36,17 @@ exports.create = function() {
   continuable.isContinuable = true;
   continuable.fulfill = handleVal;
 
+  // Promise-style then()
+  function then(success, error) {
+    return continuable(function (val) {
+      if (val instanceof Error && error)
+        return error(val);
+      else if (!(val instanceof Error))
+        return success(val);
+    });
+  }
+  continuable.then = then;
+
   return continuable;
 };
 
